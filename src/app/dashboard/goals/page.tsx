@@ -21,6 +21,8 @@ import { useFilterGoals } from "@/hooks/use-filter";
 import { useModalStore } from "@/lib/store/useModalStore";
 import { DataTable } from "@/components/ui/data-table";
 import { getGoalColumns } from "./components/goal-columns";
+import { EmptyState } from "@/components/ui/empty-state";
+import { Target } from "lucide-react";
 
 export default function GoalsPage() {
   const { openModal } = useModalStore();
@@ -81,7 +83,7 @@ export default function GoalsPage() {
         </CardHeader>
         <CardContent>
           <DataTable
-            data={filteredGoals ?? []}
+            data={filteredGoals}
             columns={columns}
             isLoading={isLoading}
             loadingMessage="Cargando..."

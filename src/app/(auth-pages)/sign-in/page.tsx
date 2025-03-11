@@ -6,12 +6,11 @@ import {
   Card,
   CardContent,
   CardDescription,
-  CardFooter,
   CardHeader,
   CardTitle,
 } from "@/components/ui/card";
 import { signIn } from "next-auth/react";
-import {FcGoogle} from "react-icons/fc"
+import { FcGoogle } from "react-icons/fc";
 import { toast } from "sonner";
 export default function LoginPage() {
   const [isLoading, setIsLoading] = useState<boolean>(false);
@@ -22,9 +21,12 @@ export default function LoginPage() {
     try {
       signIn("google", {
         redirectTo: "/dashboard",
-        redirect: true
+        redirect: true,
       });
     } catch (error) {
+      if (error instanceof Error) {
+        console.error(error.name, error.message);
+      }
       toast.error("Error al iniciar sesión");
     } finally {
       setIsLoading(false);
@@ -32,20 +34,20 @@ export default function LoginPage() {
   };
 
   return (
-    <div className="flex min-h-screen flex-col bg-black items-center justify-center p-4">
-      <Card className="w-full max-w-md shadow-lg bg-background">
+    <div className="flex min-h-screen flex-col items-center justify-center p-4 bg-black">
+      <Card className="w-full max-w-md shadow-lg bg-black">
         <CardHeader className="space-y-1 flex flex-col items-center">
-          <CardTitle className="text-2xl font-bold text-center">
+          <CardTitle className="text-2xl font-bold text-center text-white">
             Bienvenido
           </CardTitle>
-          <CardDescription className="text-center">
+          <CardDescription className="text-center text-white">
             Inicia sesión para acceder a tu cuenta
           </CardDescription>
         </CardHeader>
         <CardContent className="flex flex-col space-y-4">
           <Button
             variant="outline"
-            className="w-full flex items-center justify-center gap-2 py-6"
+            className="w-full flex items-center justify-center gap-2 py-6 bg-black"
             onClick={handleGoogleLogin}
             disabled={isLoading}
           >
@@ -54,29 +56,11 @@ export default function LoginPage() {
             ) : (
               <>
                 <FcGoogle className="h-5 w-5" />
-                <span>Continuar con Google</span>
+                <span className="text-white">Continuar con Google</span>
               </>
             )}
           </Button>
         </CardContent>
-        <CardFooter className="flex flex-col space-y-2">
-          <p className="text-xs text-center text-muted-foreground">
-            Al iniciar sesión, aceptas nuestros{" "}
-            <a
-              href="#"
-              className="underline underline-offset-2 hover:text-primary"
-            >
-              Términos de servicio
-            </a>{" "}
-            y{" "}
-            <a
-              href="#"
-              className="underline underline-offset-2 hover:text-primary"
-            >
-              Política de privacidad
-            </a>
-          </p>
-        </CardFooter>
       </Card>
     </div>
   );

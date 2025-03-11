@@ -1,3 +1,4 @@
+
 import type React from "react";
 import "./globals.css";
 import type { Metadata } from "next";
@@ -8,8 +9,8 @@ import Providers from "./providers";
 const inter = Inter({ subsets: ["latin"] });
 
 export const metadata: Metadata = {
-  title: "Financial Dashboard",
-  description: "Track your finances with ease",
+  title: "Financials",
+  description: "Gestiona tus finanzas personales",
 };
 
 export default function RootLayout({
@@ -18,12 +19,12 @@ export default function RootLayout({
   children: React.ReactNode;
 }>) {
   return (
-    <html lang="en" suppressHydrationWarning>
+    <html lang="es" suppressHydrationWarning>
       <body className={`${inter.className} antialiased`}>
         <Providers>
           <ThemeProvider
             attribute="class"
-            defaultTheme="dark"
+            defaultTheme="system"
             enableSystem
             disableTransitionOnChange
           >

@@ -1,6 +1,6 @@
 export default function Loader() {
   return (
-    <div className="flex items-center justify-center h-screen">
+    <div className="flex items-center justify-center h-screen w-full bg-black dark:bg-black">
       <svg
         viewBox="0 0 55 80"
         xmlns="http://www.w3.org/2000/svg"

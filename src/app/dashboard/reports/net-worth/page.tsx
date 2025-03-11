@@ -17,6 +17,8 @@ import ChartCard from "../components/chart-card";
 import { CustomTooltip } from "../components/custom-tool-tip";
 import { formatCurrency } from "@/utils/dashboard";
 import { useGetNetWorth } from "@/hooks/net-worth/use-get-net-worth";
+import { EmptyState } from "@/components/ui/empty-state";
+import { LineChart as LineChartIcon } from "lucide-react";
 
 function formatDate(date: string): string {
   const months = {
@@ -64,110 +66,122 @@ export default function NetWorthPage() {
         </p>
       </div>
 
-      <ChartCard
-        title="Tendencia del Patrimonio Neto"
-        description="Su patrimonio neto acumulado"
-        height="h-[400px]"
-      >
-        <LineChart data={formattedData}>
-          <CartesianGrid strokeDasharray="3 3" />
-          <XAxis dataKey="date" />
-          <YAxis />
-          <Tooltip content={<CustomTooltip />} />
-          <Legend />
-          <Line
-            type="monotone"
-            dataKey="netWorth"
-            name="Patrimonio Neto"
-            stroke="#3b82f6"
-            strokeWidth={2}
-            dot={{ r: 4 }}
-            activeDot={{ r: 6 }}
-          />
-        </LineChart>
-      </ChartCard>
+      {netWorthData.length === 0 ? (
+        <EmptyState
+          icon={LineChartIcon}
+          title="No hay datos disponibles"
+          description="Comienza registrando tus primeras transacciones para ver el análisis de tu patrimonio neto."
+          actionLabel="Registrar transacción"
+          actionLink="/dashboard/transactions"
+        />
+      ) : (
+        <>
+          <ChartCard
+            title="Tendencia del Patrimonio Neto"
+            description="Su patrimonio neto acumulado"
+            height="h-[400px]"
+          >
+            <LineChart data={formattedData}>
+              <CartesianGrid strokeDasharray="3 3" />
+              <XAxis dataKey="date" />
+              <YAxis />
+              <Tooltip content={<CustomTooltip />} />
+              <Legend />
+              <Line
+                type="monotone"
+                dataKey="netWorth"
+                name="Patrimonio Neto"
+                stroke="#3b82f6"
+                strokeWidth={2}
+                dot={{ r: 4 }}
+                activeDot={{ r: 6 }}
+              />
+            </LineChart>
+          </ChartCard>
 
-      <ChartCard
-        title="Activos vs Pasivos"
-        description="Desglose de sus activos y pasivos acumulados"
-        height="h-[400px]"
-      >
-        <AreaChart data={formattedData}>
-          <CartesianGrid strokeDasharray="3 3" />
-          <XAxis dataKey="date" />
-          <YAxis />
-          <Tooltip content={<CustomTooltip />} />
-          <Legend />
-          <Area
-            type="monotone"
-            dataKey="assets"
-            name="Activos"
-            stackId="1"
-            stroke="#4ade80"
-            fill="#4ade80"
-            fillOpacity={0.6}
-          />
-          <Area
-            type="monotone"
-            dataKey="liabilities"
-            name="Pasivos"
-            stackId="2"
-            stroke="#f43f5e"
-            fill="#f43f5e"
-            fillOpacity={0.6}
-          />
-        </AreaChart>
-      </ChartCard>
+          <ChartCard
+            title="Activos vs Pasivos"
+            description="Desglose de sus activos y pasivos acumulados"
+            height="h-[400px]"
+          >
+            <AreaChart data={formattedData}>
+              <CartesianGrid strokeDasharray="3 3" />
+              <XAxis dataKey="date" />
+              <YAxis />
+              <Tooltip content={<CustomTooltip />} />
+              <Legend />
+              <Area
+                type="monotone"
+                dataKey="assets"
+                name="Activos"
+                stackId="1"
+                stroke="#4ade80"
+                fill="#4ade80"
+                fillOpacity={0.6}
+              />
+              <Area
+                type="monotone"
+                dataKey="liabilities"
+                name="Pasivos"
+                stackId="2"
+                stroke="#f43f5e"
+                fill="#f43f5e"
+                fillOpacity={0.6}
+              />
+            </AreaChart>
+          </ChartCard>
 
-      <div className="grid gap-4 md:grid-cols-3">
-        <Card>
-          <CardHeader>
-            <CardTitle className="text-sm font-medium">
-              Patrimonio neto total
-            </CardTitle>
-          </CardHeader>
-          <CardContent>
-            <div className="text-2xl font-bold">
-              {formatCurrency(currentNetWorth)}
-            </div>
-            <p className="text-xs text-muted-foreground">
-              {netWorthChange.toFixed(1)}% Crecimiento desde {startDate}
-            </p>
-          </CardContent>
-        </Card>
+          <div className="grid gap-4 md:grid-cols-3">
+            <Card>
+              <CardHeader>
+                <CardTitle className="text-sm font-medium">
+                  Patrimonio neto total
+                </CardTitle>
+              </CardHeader>
+              <CardContent>
+                <div className="text-2xl font-bold">
+                  {formatCurrency(currentNetWorth)}
+                </div>
+                <p className="text-xs text-muted-foreground">
+                  {netWorthChange.toFixed(1)}% Crecimiento desde {startDate}
+                </p>
+              </CardContent>
+            </Card>
 
-        <Card>
-          <CardHeader>
-            <CardTitle className="text-sm font-medium">
-              Activos totales
-            </CardTitle>
-          </CardHeader>
-          <CardContent>
-            <div className="text-2xl font-bold">
-              {formatCurrency(currentAssets)}
-            </div>
-            <p className="text-xs text-muted-foreground">
-              {assetsChange.toFixed(1)}% Crecimiento desde {startDate}
-            </p>
-          </CardContent>
-        </Card>
+            <Card>
+              <CardHeader>
+                <CardTitle className="text-sm font-medium">
+                  Activos totales
+                </CardTitle>
+              </CardHeader>
+              <CardContent>
+                <div className="text-2xl font-bold">
+                  {formatCurrency(currentAssets)}
+                </div>
+                <p className="text-xs text-muted-foreground">
+                  {assetsChange.toFixed(1)}% Crecimiento desde {startDate}
+                </p>
+              </CardContent>
+            </Card>
 
-        <Card>
-          <CardHeader>
-            <CardTitle className="text-sm font-medium">
-              Pasivos totales
-            </CardTitle>
-          </CardHeader>
-          <CardContent>
-            <div className="text-2xl font-bold">
-              {formatCurrency(currentLiabilities)}
-            </div>
-            <p className="text-xs text-muted-foreground">
-              {liabilitiesChange.toFixed(1)}% Reducción desde {startDate}
-            </p>
-          </CardContent>
-        </Card>
-      </div>
+            <Card>
+              <CardHeader>
+                <CardTitle className="text-sm font-medium">
+                  Pasivos totales
+                </CardTitle>
+              </CardHeader>
+              <CardContent>
+                <div className="text-2xl font-bold">
+                  {formatCurrency(currentLiabilities)}
+                </div>
+                <p className="text-xs text-muted-foreground">
+                  {liabilitiesChange.toFixed(1)}% Reducción desde {startDate}
+                </p>
+              </CardContent>
+            </Card>
+          </div>
+        </>
+      )}
     </div>
   );
 }

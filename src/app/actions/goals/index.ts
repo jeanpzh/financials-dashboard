@@ -2,7 +2,7 @@
 
 import { db } from "@/db/drizzle";
 import { goals, category } from "@/db/schema";
-import { eq } from "drizzle-orm";
+import { DrizzleError, eq } from "drizzle-orm";
 import { GoalFormData } from "@/app/dashboard/goals/schema";
 import { auth } from "@/auth";
 import { AuthError } from "next-auth";

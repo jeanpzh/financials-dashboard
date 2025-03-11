@@ -27,19 +27,16 @@ import { formatCurrency } from "@/utils/dashboard";
 import { useGetTransactions } from "@/hooks/transactions/use-get-transactions";
 import { Transaction } from "@/lib/types/transaction";
 import { useGetCategories } from "@/hooks/goals/use-get-categories";
+import { Category } from "@/lib/types/category";
 
 export default function IncomeExpensePage() {
   const { data: transactions } = useGetTransactions();
-  const incomePieData = getIncomePieData((transactions as Transaction[]) ?? []);
-  const expensesPieData = getExpensesPieData(
-    (transactions as Transaction[]) ?? []
-  );
-  const { data: items } = useGetCategories("all");
-  const categories = items as any[];
-  const response = getMonthlyData({
-    transactions: transactions as Transaction[],
-  });
-  const monthlyData = response && response.month ? [{ ...response }] : [];
+  const { data: categories } = useGetCategories("all");
+  
+  const incomePieData = getIncomePieData(transactions ?? []);
+  const expensesPieData = getExpensesPieData(transactions ?? []);
+  const monthlyResponse = getMonthlyData({ transactions: transactions ?? [] });
+  const monthlyData = monthlyResponse && monthlyResponse.month ? [monthlyResponse] : [];
 
   return (
     <div className="space-y-6">
@@ -62,7 +59,7 @@ export default function IncomeExpensePage() {
             description="Compara tus ingresos y gastos en el último año"
             height="h-[400px]"
           >
-            <BarChart data={monthlyData}>
+            <BarChart data={monthlyData ?? []}>
               <CartesianGrid strokeDasharray="3 3" />
               <XAxis dataKey="month" />
               <YAxis />
@@ -81,7 +78,7 @@ export default function IncomeExpensePage() {
               description="La diferencia entre tus ingresos y gastos"
               height="h-[300px]"
             >
-              <BarChart data={calculateSavings(monthlyData || [])}>
+              <BarChart data={calculateSavings(monthlyData ?? [])}>
                 <CartesianGrid strokeDasharray="3 3" />
                 <XAxis dataKey="month" />
                 <YAxis />
@@ -96,7 +93,7 @@ export default function IncomeExpensePage() {
               description="Porcentaje de ingresos ahorrados cada mes"
               height="h-[300px]"
             >
-              <BarChart data={calculateSavingsRate(monthlyData || [])}>
+              <BarChart data={calculateSavingsRate(monthlyData ?? [])}>
                 <CartesianGrid strokeDasharray="3 3" />
                 <XAxis dataKey="month" />
                 <YAxis unit="%" />
@@ -137,9 +134,7 @@ export default function IncomeExpensePage() {
                   {incomePieData.map((entry, index) => (
                     <Cell
                       key={`cell-${index}`}
-                      fill={
-                        getCategoryColor(entry.name, categories ?? []) ?? "#ccc"
-                      }
+                      fill={getCategoryColor(entry.name, categories ?? []) ?? "#ccc"}
                     />
                   ))}
                 </Pie>
@@ -169,7 +164,7 @@ export default function IncomeExpensePage() {
                   {expensesPieData.map((entry, index) => (
                     <Cell
                       key={`cell-${index}`}
-                      fill={getCategoryColor(entry.name, categories) ?? "#ccc"}
+                      fill={getCategoryColor(entry.name, categories ?? []) ?? "#ccc"}
                     />
                   ))}
                 </Pie>
@@ -201,7 +196,7 @@ export default function IncomeExpensePage() {
                 {incomePieData.map((entry, index) => (
                   <Cell
                     key={`cell-${index}`}
-                    fill={getCategoryColor(entry.name, categories) ?? "#ccc"}
+                    fill={getCategoryColor(entry.name, categories ?? []) ?? "#ccc"}
                   />
                 ))}
               </Pie>

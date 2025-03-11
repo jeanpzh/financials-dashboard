@@ -6,7 +6,6 @@ import {
   getCoreRowModel,
   getSortedRowModel,
   getPaginationRowModel,
-  SortingState,
   useReactTable,
   Header,
   HeaderGroup,

@@ -71,21 +71,6 @@ export const getTransactionColumns = ({
     },
   },
   {
-    accessorKey: "account",
-    header: ({ column }) => {
-      return (
-        <Button
-          variant="ghost"
-          className="p-0 hover:bg-transparent"
-          onClick={() => column.toggleSorting(column.getIsSorted() === "asc")}
-        >
-          <span>Cuenta</span>
-          <ArrowUpDown className="ml-2 h-4 w-4" />
-        </Button>
-      );
-    },
-  },
-  {
     accessorKey: "date",
     header: ({ column }) => {
       return (

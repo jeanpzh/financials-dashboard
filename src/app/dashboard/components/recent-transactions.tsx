@@ -16,52 +16,18 @@ import Loader from "@/components/loader";
 
 interface RecentTransactionsProps {
   transactions: Transaction[];
-  isLoading: boolean;
 }
 
 export function RecentTransactions({
   transactions = [],
-  isLoading,
 }: RecentTransactionsProps) {
-  if (isLoading) {
-    return (
-      <Card>
-        <CardHeader>
-          <CardTitle>Transacciones Recientes</CardTitle>
-          <CardDescription>Últimas 5 transacciones</CardDescription>
-        </CardHeader>
-        <CardContent>
-          <Loader  />
-        </CardContent>
-      </Card>
-    );
-  }
-
-  if (transactions.length === 0) {
-    return (
-      <Card>
-        <CardHeader>
-          <CardTitle>Transacciones Recientes</CardTitle>
-          <CardDescription>Últimas 5 transacciones</CardDescription>
-        </CardHeader>
-        <CardContent>
-          <EmptyState
-            icon={Receipt}
-            title="Sin transacciones"
-            description="No hay transacciones registradas aún."
-            actionLabel="Registrar transacción"
-            actionLink="/dashboard/transactions/new"
-          />
-        </CardContent>
-      </Card>
-    );
-  }
-
   return (
     <Card>
       <CardHeader>
         <CardTitle>Transacciones Recientes</CardTitle>
-        <CardDescription>Has realizado {transactions.length} transacciones este mes.</CardDescription>
+        <CardDescription>
+          Has realizado {transactions.length} transacciones este mes.
+        </CardDescription>
       </CardHeader>
       <CardContent>
         <div className="space-y-8">

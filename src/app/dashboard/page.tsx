@@ -19,17 +19,45 @@ import {
   getRecentTransactions,
 } from "@/utils/dashboard";
 import { Transaction } from "@/lib/types/transaction";
+import { Skeleton } from "@/components/ui/skeleton";
 
 export default function DashboardPage() {
   const [activeTab, setActiveTab] = useState("overview");
-  const { data: transactions = [] } = useGetTransactions();
-  const { data: goals } = useGetGoals();
+  const { data: transactions = [], isLoading: transactionsLoading } =
+    useGetTransactions();
+  const { data: goals , isLoading: goalsLoading } = useGetGoals();
   const recentTransactions = getRecentTransactions(
     5,
     transactions as Transaction[]
   );
 
   const activeGoals = goals?.slice(0, 4) ?? [];
+
+  if (transactionsLoading || goalsLoading) {
+    return (
+      <div className="flex flex-col space-y-6">
+        <div className="flex items-center justify-between space-y-2">
+          <Skeleton className="h-10 w-48" />
+        </div>
+        <div className="grid gap-4 md:grid-cols-2 lg:grid-cols-4">
+          {[1, 2, 3, 4].map((i) => (
+            <Skeleton key={i} className="h-[120px]" />
+          ))}
+        </div>
+        <Tabs defaultValue="overview" className="space-y-4">
+          <TabsList>
+            <Skeleton className="h-10 w-[300px]" />
+          </TabsList>
+          <TabsContent value="overview" className="space-y-4">
+            <div className="grid gap-4 md:grid-cols-2 lg:grid-cols-7">
+              <Skeleton className="col-span-4 h-[300px]" />
+              <Skeleton className="col-span-3 h-[300px]" />
+            </div>
+          </TabsContent>
+        </Tabs>
+      </div>
+    );
+  }
 
   return (
     <div className="space-y-6">
@@ -61,9 +89,8 @@ export default function DashboardPage() {
             <div className="grid gap-4 grid-cols-1 md:grid-cols-2">
               <RecentTransactions
                 transactions={recentTransactions}
-                isLoading={false}
               />
-              <GoalsOverview goals={activeGoals} isLoading={false} />
+              <GoalsOverview goals={activeGoals} />
             </div>
           </TabsContent>
           <TabsContent value="goals" className="space-y-6">
@@ -87,7 +114,9 @@ export default function DashboardPage() {
                           <span className="text-sm text-muted-foreground">
                             Progreso
                           </span>
-                          <span className="text-sm font-medium">{progress}%</span>
+                          <span className="text-sm font-medium">
+                            {progress}%
+                          </span>
                         </div>
                         <Progress value={progress} className="h-2" />
                         <div className="flex items-center justify-between">

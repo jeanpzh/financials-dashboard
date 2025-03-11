@@ -15,12 +15,10 @@ import { Skeleton } from "@/components/ui/skeleton";
 
 interface GoalsOverviewProps {
   goals: Goal[];
-  isLoading: boolean;
 }
 
 
-export function GoalsOverview({ goals, isLoading }: GoalsOverviewProps) {
-  if (isLoading) return <Skeleton className="h-96" />;
+export function GoalsOverview({ goals}: GoalsOverviewProps) {
   return (
     <>
       <Card>

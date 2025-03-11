@@ -19,40 +19,43 @@ import { formatCurrency } from "@/utils/dashboard";
 import { useGetNetWorth } from "@/hooks/net-worth/use-get-net-worth";
 import { EmptyState } from "@/components/ui/empty-state";
 import { LineChart as LineChartIcon } from "lucide-react";
+import ReportSkeleton from "../components/income-expense-skeleton";
 
 function formatDate(date: string): string {
   const months = {
-    '01': 'Enero',
-    '02': 'Febrero',
-    '03': 'Marzo',
-    '04': 'Abril',
-    '05': 'Mayo',
-    '06': 'Junio',
-    '07': 'Julio',
-    '08': 'Agosto',
-    '09': 'Septiembre',
-    '10': 'Octubre',
-    '11': 'Noviembre',
-    '12': 'Diciembre'
+    "01": "Enero",
+    "02": "Febrero",
+    "03": "Marzo",
+    "04": "Abril",
+    "05": "Mayo",
+    "06": "Junio",
+    "07": "Julio",
+    "08": "Agosto",
+    "09": "Septiembre",
+    "10": "Octubre",
+    "11": "Noviembre",
+    "12": "Diciembre",
   };
-  
-  const [year, month] = date.split('-');
+
+  const [year, month] = date.split("-");
   return `${months[month as keyof typeof months]} ${year}`;
 }
 
 export default function NetWorthPage() {
-  const { data: netWorthData = [] } = useGetNetWorth();
-  const startDate = netWorthData[0]?.date ? formatDate(netWorthData[0].date) : 'N/A';
-  const currentNetWorth = getCurrentValue(netWorthData, "netWorth");
-  const currentAssets = getCurrentValue(netWorthData, "assets");
-  const currentLiabilities = getCurrentValue(netWorthData, "liabilities");
-  const netWorthChange = getPercentageChange(netWorthData, "netWorth");
-  const assetsChange = getPercentageChange(netWorthData, "assets");
-  const liabilitiesChange = getPercentageChange(netWorthData, "liabilities", true);
+  const { data: netWorthData, isLoading } = useGetNetWorth();
+  const startDate = netWorthData?.[0]?.date
+    ? formatDate(netWorthData[0].date)
+    : "N/A";
+  const currentNetWorth = getCurrentValue(netWorthData ?? [], "netWorth");
+  const currentAssets = getCurrentValue(netWorthData ?? [], "assets");
+  const currentLiabilities = getCurrentValue(netWorthData ?? [], "liabilities");
+  const netWorthChange = getPercentageChange(netWorthData ?? [], "netWorth");
+  const assetsChange = getPercentageChange(netWorthData ?? [], "assets");
+  const liabilitiesChange = getPercentageChange(netWorthData ?? [], "liabilities", true);
 
-  const formattedData = netWorthData.map(item => ({
+  const formattedData = (netWorthData ?? []).map((item) => ({
     ...item,
-    date: formatDate(item.date)
+    date: formatDate(item.date),
   }));
 
   return (
@@ -66,7 +69,9 @@ export default function NetWorthPage() {
         </p>
       </div>
 
-      {netWorthData.length === 0 ? (
+      {(!netWorthData || isLoading) ? (
+        <ReportSkeleton />
+      ) : netWorthData.length === 0 ? (
         <EmptyState
           icon={LineChartIcon}
           title="No hay datos disponibles"

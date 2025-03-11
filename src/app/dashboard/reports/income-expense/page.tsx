@@ -28,10 +28,13 @@ import { useGetTransactions } from "@/hooks/transactions/use-get-transactions";
 import { useGetCategories } from "@/hooks/goals/use-get-categories";
 import { EmptyState } from "@/components/ui/empty-state";
 import { PieChartIcon } from "lucide-react";
+import ReportSkeleton from "../components/income-expense-skeleton";
 
 export default function IncomeExpensePage() {
-  const { data: transactions = [] } = useGetTransactions();
-  const { data: categories = [] } = useGetCategories("all");
+  const { data: transactions = [], isLoading: transactionsLoading } =
+    useGetTransactions();
+  const { data: categories = [], isLoading: categoriesLoading } =
+    useGetCategories("all");
 
   const incomePieData = getIncomePieData(transactions);
   const expensesPieData = getExpensesPieData(transactions);
@@ -41,6 +44,10 @@ export default function IncomeExpensePage() {
 
   const hasData =
     (transactions?.length ?? 0) > 0 && (categories?.length ?? 0) > 0;
+
+  if (transactionsLoading || categoriesLoading) {
+    return <ReportSkeleton />;
+  }
 
   return (
     <div className="space-y-6">

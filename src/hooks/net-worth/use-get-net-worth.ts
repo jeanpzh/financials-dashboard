@@ -47,7 +47,7 @@ function calculateNetWorthData(transactions: Transaction[]): NetWorthData[] {
 }
 
 export function useGetNetWorth() {
-  const { data: transactions } = useGetTransactions();
+  const { data: transactions , isLoading} = useGetTransactions();
 
   return useQuery<NetWorthData[]>({
     queryKey: ["netWorth"],

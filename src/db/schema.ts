@@ -44,20 +44,7 @@ export const category = pgTable("category", {
   color: text(),
   userId: text().references(() => users.id),
 });
-export const monthlyData = pgTable("monthlyData", {
-  month: text(),
-  income: integer(),
-  expenses: integer(),
-  userId: text().references(() => users.id),
-});
 
-export const netWorthData = pgTable("netWorthData", {
-  date: date(),
-  assets: integer(),
-  liabilities: integer(),
-  netWorth: integer(),
-  userId: text().references(() => users.id),
-});
 
 export const users = pgTable("user", {
   id: text("id")
@@ -151,5 +138,3 @@ export type Goal = typeof goals.$inferSelect;
 export type Transaction = typeof transactions.$inferSelect;
 export type TransactionType = typeof transactionTypes.$inferSelect;
 export type Category = typeof category.$inferSelect;
-export type MonthlyData = typeof monthlyData.$inferSelect;
-export type NetWorthData = typeof netWorthData.$inferSelect;

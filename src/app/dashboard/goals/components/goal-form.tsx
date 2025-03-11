@@ -52,25 +52,25 @@ export default function GoalForm({ type }: { type: "edit" | "create" }) {
   return (
     <form onSubmit={handleSubmit(onSubmit)}>
       <div className="grid gap-4 py-4 w-full">
-        <Field control={control} label="Goal Name" name="name" type="input" />
+        <Field control={control} label="Nombre del objetivo" name="name" type="input" />
         <div className="grid grid-cols-2 gap-4">
           <Field
             control={control}
-            label="Target Amount"
+            label="Monto objetivo"
             name="targetAmount"
             type="input"
           />
           <Field
             control={control}
-            label="Current Amount"
+            label="Monto actual"
             name="currentAmount"
             type="input"
           />
         </div>
-        <Field control={control} label="Deadline" name="deadline" type="date" />
+        <Field control={control} label="Fecha de vencimiento" name="deadline" type="date" />
         <Field
           control={control}
-          label="Category"
+          label="Categoría"
           name="category"
           type="select"
           options={categories ?? []}
